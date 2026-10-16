@@ -1,15 +1,20 @@
 {
-	"$schema": "./node_modules/wrangler/config-schema.json",
-	"name": "stopwatch-game",
-	"compatibility_date": "2026-10-16",
-	"compatibility_flags": [
-		"nodejs_als"
-	],
-	"main": ".svelte-kit/cloudflare/_worker.js",
-	"assets": {
-		"binding": "ASSETS",
-		"directory": ".svelte-kit/cloudflare"
-	},
-	"workers_dev": true,
-	"preview_urls": true
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "stopwatch-game",
+  "compatibility_date": "2026-10-16",
+  "compatibility_flags": ["nodejs_als"],
+  "main": ".svelte-kit/cloudflare/_worker.js",
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".svelte-kit/cloudflare",
+  },
+  "workers_dev": true,
+  "preview_urls": true,
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "STOP_WATCH_GAME_DB",
+      "database_id": "34e9b8fb-4cd4-469b-9199-bcfb7e2b5379",
+    },
+  ],
 }
