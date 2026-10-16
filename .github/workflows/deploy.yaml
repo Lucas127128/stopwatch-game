@@ -1,0 +1,30 @@
+name: deploy
+on: [push]
+jobs:
+  build:
+    name: deploy app
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Cache
+        uses: actions/cache@v6
+        with:
+          key: ${{ runner.os  }}-key
+          path: |
+            .svelte-kit/**/*
+            node_modules/**/*
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+      - name: Install dependency
+        run: bun i --frozen-lockfile
+      - name: Build app
+        run: bun run build
+      - name: Deploy
+        run: bunx wrangler versions upload
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
