@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { createHotkey } from "@tanstack/svelte-hotkeys";
+
   let counting = $state(false);
   let buttonText = $derived(counting ? "Stop" : "Start");
   let time = $state(0);
@@ -23,10 +25,22 @@
     clearInterval(intervalId);
     time = 0;
   };
+  $effect(() => {
+    createHotkey("Space", () => {
+      if (counting) {
+        stopTimer();
+      } else {
+        startTimer();
+      }
+    });
+    createHotkey("R", () => {
+      resetTimer();
+    });
+  });
 </script>
 
 <div class="w-dvw flex align-center items-center gap-8 p-8 flex-col">
-  <h1 class="text-3xl font-bold text-accent">Reach 10:00:00 !</h1>
+  <h1 class="text-3xl font-bold text-accent">Reach 10:00 !</h1>
   <div class="text-8xl font-mono">{timeString}</div>
   <button
     class="btn btn-accent justify-center rounded-full w-lg h-lg py-10"
