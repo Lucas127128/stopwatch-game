@@ -7,6 +7,7 @@
   let dialog = $state<HTMLDialogElement | null>(null);
 
   let counting = $state(false);
+  let willShowDialog = $state(false);
   let buttonText = $derived(counting ? "Stop" : "Start");
   let time = $state(0);
   const timeString = $derived(formatTime(time));
@@ -20,8 +21,10 @@
   };
   const stopTimer = () => {
     counting = false;
+    willShowDialog = true;
     clearInterval(intervalId);
     setTimeout(() => {
+      willShowDialog = false;
       dialog?.showModal();
     }, 3000);
   };
@@ -34,13 +37,19 @@
     dialog?.close();
   };
   $effect(() => {
-    createHotkey("Space", () => {
-      if (counting) {
-        stopTimer();
-      } else {
-        startTimer();
-      }
-    });
+    createHotkey(
+      "Space",
+      () => {
+        if (counting) {
+          stopTimer();
+        } else {
+          startTimer();
+        }
+      },
+      () => ({
+        enabled: !willShowDialog,
+      }),
+    );
     createHotkey("R", () => {
       resetTimer();
     });
@@ -53,6 +62,7 @@
   <button
     class="btn btn-accent justify-center rounded-full w-lg h-lg py-10"
     class:btn-error={counting}
+    disabled={willShowDialog}
     onclick={counting ? stopTimer : startTimer}>{buttonText}</button
   >
   <button class="btn btn-warning justify-center rounded-full w-lg h-lg py-10" onclick={resetTimer}
