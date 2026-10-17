@@ -1,3 +1,49 @@
 @import "tailwindcss";
 
 @plugin "daisyui";
+
+@layer components {
+  .dialog-anim {
+    opacity: 0;
+    scale: 0.95;
+    translate: 0 -0.75rem;
+    transition:
+      opacity 0.25s ease-out,
+      scale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+      translate 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+      display 0.3s allow-discrete,
+      overlay 0.3s allow-discrete;
+
+    &::backdrop {
+      background-color: oklab(0% 0 0 / 0.4);
+      opacity: 0;
+      transition:
+        opacity 0.25s ease-out,
+        background-color 0.25s ease-out,
+        display 0.25s allow-discrete,
+        overlay 0.25s allow-discrete;
+    }
+  }
+
+  .dialog-anim:is([open]) {
+    opacity: 1;
+    scale: 1;
+    translate: 0 0;
+
+    &::backdrop {
+      opacity: 1;
+    }
+  }
+
+  @starting-style {
+    .dialog-anim:is([open]) {
+      opacity: 0;
+      scale: 0.95;
+      translate: 0 -0.75rem;
+
+      &::backdrop {
+        opacity: 0;
+      }
+    }
+  }
+}

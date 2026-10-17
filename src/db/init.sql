@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS results (
+    user_name TEXT NOT NULL,
+    time_taken INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
