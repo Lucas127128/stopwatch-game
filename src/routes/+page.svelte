@@ -35,6 +35,7 @@
   };
   const closeDialog = () => {
     dialog?.close();
+    resetTimer();
   };
   $effect(() => {
     createHotkey(
@@ -50,9 +51,15 @@
         enabled: !willShowDialog,
       }),
     );
-    createHotkey("R", () => {
-      resetTimer();
-    });
+    createHotkey(
+      "R",
+      () => {
+        resetTimer();
+      },
+      () => ({
+        enabled: !willShowDialog,
+      }),
+    );
   });
 </script>
 
@@ -60,13 +67,15 @@
   <h1 class="text-3xl font-bold text-accent">Reach 7:00 !</h1>
   <div class="text-8xl font-mono">{timeString}</div>
   <button
-    class="btn btn-accent justify-center rounded-full w-lg h-lg py-10"
+    class="btn btn-accent justify-center rounded-full w-[85dvw] sm:w-lg h-lg py-10"
     class:btn-error={counting}
     disabled={willShowDialog}
     onclick={counting ? stopTimer : startTimer}>{buttonText}</button
   >
-  <button class="btn btn-warning justify-center rounded-full w-lg h-lg py-10" onclick={resetTimer} disabled={willShowDialog}
-    >Reset</button
+  <button
+    class="btn btn-warning justify-center rounded-full w-[85dvw] sm:w-lg h-lg py-10"
+    onclick={resetTimer}
+    disabled={willShowDialog}>Reset</button
   >
 </div>
 
