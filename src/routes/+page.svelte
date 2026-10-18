@@ -65,7 +65,7 @@
     disabled={willShowDialog}
     onclick={counting ? stopTimer : startTimer}>{buttonText}</button
   >
-  <button class="btn btn-warning justify-center rounded-full w-lg h-lg py-10" onclick={resetTimer}
+  <button class="btn btn-warning justify-center rounded-full w-lg h-lg py-10" onclick={resetTimer} disabled={willShowDialog}
     >Reset</button
   >
 </div>
