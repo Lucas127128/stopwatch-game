@@ -1,6 +1,8 @@
 import { command, query } from "$app/server";
 import { array, number, object, safeParse, string, type InferOutput } from "valibot";
 import { env } from "cloudflare:workers";
+import bcrypt from "bcryptjs";
+import { BCRYPTED_PW } from "$app/env/private";
 
 const dbSchema = array(
   object({
@@ -35,5 +37,20 @@ export const getResult = query<{ sucess: true; data: DbSchema } | { sucess: fals
     } else {
       return { sucess: false, error: "Failed to retrieve results" };
     }
+  },
+);
+
+export const removeResult = query(
+  object({ createdAt: string(), password: string() }),
+  async ({ createdAt, password }) => {
+    const isValid = await bcrypt.compare(password, BCRYPTED_PW);
+    console.log(bcrypt.hashSync(password));
+    if (!isValid) {
+      return { fail: true, message: "Invalid password" };
+    }
+    const { DB } = env;
+    const deleteQuery = DB.prepare("DELETE FROM results WHERE created_at = ?");
+    deleteQuery.bind(createdAt).run();
+    await getResult().refresh();
   },
 );
