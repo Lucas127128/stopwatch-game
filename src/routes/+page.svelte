@@ -113,14 +113,27 @@
       <span class="text-4xl font-mono">{timeString}</span>
     </div>
     {let name = $state("")}
+    {const invalid = $state({ state: false, message: "" })}
     <div class="flex items-center gap-3 w-full">
       <span>Name:</span>
       <input
         type="text"
         class="h-8 w-full border-accent border outline-none px-2.5 rounded-sm"
+        class:border-error={invalid.state}
         bind:value={name}
+        onkeyup={() => {
+          if (name.trim().length === 0) {
+            console.log(name);
+            invalid.state = true;
+            invalid.message = "Name should not be empty";
+          } else {
+            invalid.state = false;
+            invalid.message = "";
+          }
+        }}
       />
     </div>
+    <span class="text-error h-4 self-start">{invalid.message}</span>
     <div class="flex items-center gap-3 w-full justify-end">
       <button
         class="btn btn-accent"
