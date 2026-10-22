@@ -50,7 +50,7 @@ export const removeResult = query(
     }
     const { DB } = env;
     const deleteQuery = DB.prepare("DELETE FROM results WHERE created_at = ?");
-    deleteQuery.bind(createdAt).run();
+    await deleteQuery.bind(createdAt).run();
     await getResult().refresh();
   },
 );
