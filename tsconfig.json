@@ -2,7 +2,7 @@
   "extends": "$app/tsconfig",
   "compilerOptions": {
     "strict": true,
-    "types": ["$app/types", "./worker-configuration.d.ts"]
+    "types": ["$app/types", "@types/canvas-confetti"]
   },
   "include": ["src", "vite.config.ts"]
 }

@@ -4,6 +4,8 @@
   import { goto } from "$app/navigation";
   import { createHotkey } from "@tanstack/svelte-hotkeys";
 
+  import confetti from "canvas-confetti";
+
   let dialog = $state<HTMLDialogElement | null>(null);
 
   let counting = $state(false);
@@ -27,6 +29,23 @@
       willShowDialog = false;
       dialog?.showModal();
     }, 3000);
+
+    const audio = new Audio("/super-smash-bros-bonus-results.mp3");
+    if (Math.abs(time - 7000) < 50) {
+      setTimeout(async () => {
+        await audio.play();
+        confetti({
+          particleCount: 200,
+          spread: 80,
+          origin: { y: 0.9, x: 1 },
+        });
+        confetti({
+          particleCount: 200,
+          spread: 80,
+          origin: { y: 0.9, x: 0 },
+        });
+      }, 300);
+    }
   };
   const resetTimer = () => {
     counting = false;
@@ -34,9 +53,11 @@
     time = 0;
   };
   const closeDialog = () => {
+    time = 0;
     dialog?.close();
     resetTimer();
   };
+
   $effect(() => {
     createHotkey(
       "Space",
@@ -51,6 +72,8 @@
         enabled: !willShowDialog,
       }),
     );
+  });
+  $effect(() => {
     createHotkey(
       "R",
       () => {
