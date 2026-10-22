@@ -23,6 +23,8 @@ jobs:
         run: bun i --frozen-lockfile
       - name: Build app
         run: bun run build
+        env:
+          BCRYPTED_PW: ${{ secrets.BCRYPTED_PW }}
       - name: Deploy
         run: bunx wrangler versions upload
         env:
