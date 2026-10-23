@@ -1,8 +1,19 @@
 <script lang="ts">
   import { page } from "$app/state";
+  import { createHotkey } from "@tanstack/svelte-hotkeys";
   import "./layout.css";
+  import { goto } from "$app/navigation";
 
   let { children } = $props();
+
+  $effect(() => {
+    createHotkey("1", async () => {
+      await goto("/");
+    });
+    createHotkey("2", async () => {
+      await goto("/leaderboard");
+    });
+  });
 </script>
 
 <svelte:head>
