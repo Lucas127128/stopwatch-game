@@ -5,6 +5,7 @@
   import Trash from "@lucide/svelte/icons/trash";
 
   const results = $derived(await getResult());
+  let cachedPassword = "";
 </script>
 
 <div class="flex flex-col items-center">
@@ -21,6 +22,7 @@
           .map((leader, index) => ({ ...leader, rank: index + 1 })),
       )}
       {#each leaders as leader (leader.created_at)}
+        {let dialog = $state<HTMLDialogElement>()}
         <div
           class="bg-emerald-300 p-2 rounded-xl text-black grid col-span-5 grid-cols-subgrid items-center"
         >
@@ -30,10 +32,16 @@
           <span>{formatDate(addHours(new Date(leader.created_at), 8), "hh:mm:ss")}</span>
           <button
             class="btn btn-error btn-ghost"
-            command="show-modal"
-            commandfor="delete-dialog-{leader.created_at}"><Trash /></button
+            onclick={async () => {
+              if (cachedPassword) {
+                await removeResult({ createdAt: leader.created_at, password: cachedPassword });
+              } else {
+                dialog?.showModal();
+              }
+            }}><Trash /></button
           >
           <dialog
+            bind:this={dialog}
             id="delete-dialog-{leader.created_at}"
             class="dialog-anim fixed m-auto mt-[15dvh] inset-0 border-2 border-[#666] p-4 bg-base-100 rounded-xl w-xl max-h-[35em]"
           >
@@ -56,10 +64,15 @@
                 >
                 <button
                   class="btn btn-error"
-                  command="close"
-                  commandfor="delete-dialog-{leader.created_at}"
                   onclick={async () => {
-                    await removeResult({ createdAt: leader.created_at, password: password });
+                    const result = await removeResult({
+                      createdAt: leader.created_at,
+                      password: password,
+                    });
+                    if (!result?.fail) {
+                      cachedPassword = password;
+                      dialog.close();
+                    }
                   }}>Delete</button
                 >
               </div>

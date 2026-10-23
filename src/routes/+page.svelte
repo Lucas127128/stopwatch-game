@@ -137,6 +137,7 @@
     <div class="flex items-center gap-3 w-full justify-end">
       <button
         class="btn btn-accent"
+        disabled={invalid.state}
         onclick={async () => {
           await addResult({ username: name, timeTaken: time });
           dialog?.close();
