@@ -139,6 +139,7 @@
         class="btn btn-accent"
         disabled={invalid.state}
         onclick={async () => {
+          invalid.state=true;
           await addResult({ username: name, timeTaken: time });
           dialog?.close();
           await goto("/leaderboard");
