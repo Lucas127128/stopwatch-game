@@ -10,7 +10,7 @@
 
 <div class="flex flex-col items-center">
   <h1 class="text-3xl font-bold pt-8 text-accent">Leaderboard</h1>
-  <div class="px-2 w-sm pt-5 grid grid-cols-[1fr_2fr_4fr_3fr_1fr] gap-3">
+  <div class="px-2 w-[85dvw] sm:w-sm pt-5 grid grid-cols-[1fr_2fr_4fr_3fr_1fr] gap-3">
     {#if results.sucess}
       {const leaders = $derived(
         results.data
